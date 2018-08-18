@@ -19,6 +19,10 @@ import xadmin
 from django.views.generic import TemplateView
 from users.views import LoginView,RegisterViews,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView
 from organization.views import OrgView
+
+from django.views.static import serve
+from MxOnline.settings import MEDIA_ROOT
+
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     path('',TemplateView.as_view(template_name='index.html'),name='index'),
@@ -30,5 +34,6 @@ urlpatterns = [
     re_path('reset/(?P<active_code>.*)/', ResetView.as_view(), name='reset_pwd'),
     path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
 
-    path('org_list/',OrgView.as_view(),name = 'org_list'),
+    path("org/", include('organization.urls', namespace="org")),
+    re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
 ]
